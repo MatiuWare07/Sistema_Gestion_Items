@@ -8,26 +8,37 @@ import com.nintendo.items.zelda.*;
 import com.nintendo.items.enums.*;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
+import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.*;
 import java.util.List;
 
 /**
- * Interfaz gráfica principal del Sistema de Gestión de Ítems.
- * Utiliza Java Swing para proporcionar una interfaz visual interactiva.
+ * Interfaz gráfica moderna del Sistema de Gestión de Ítems con diseño Nintendo.
  *
- * @author Mateo Fitipaldi
- * @version 1.0
+ * @author Tu nombre
+ * @version 2.0
  */
 public class InventarioGUI extends JFrame {
+
+    // Colores temáticos de Nintendo
+    private static final Color NINTENDO_RED = new Color(230, 0, 18);
+    private static final Color MARIO_RED = new Color(228, 0, 43);
+    private static final Color MARIO_BLUE = new Color(0, 147, 221);
+    private static final Color ZELDA_GREEN = new Color(106, 190, 48);
+    private static final Color ZELDA_GOLD = new Color(255, 197, 32);
+    private static final Color BACKGROUND_DARK = new Color(40, 44, 52);
+    private static final Color PANEL_BG = new Color(50, 54, 62);
+    private static final Color CARD_BG = new Color(60, 64, 72);
+    private static final Color TEXT_PRIMARY = new Color(240, 240, 245);
+    private static final Color TEXT_SECONDARY = new Color(180, 180, 190);
 
     // Inventarios
     private Inventario inventarioMario;
     private Inventario inventarioLink;
 
-    // Componentes de la interfaz
+    // Componentes
     private JTabbedPane tabbedPane;
     private DefaultListModel<String> listModelMario;
     private DefaultListModel<String> listModelLink;
@@ -37,269 +48,365 @@ public class InventarioGUI extends JFrame {
     private JLabel labelCapacidadMario;
     private JLabel labelCapacidadLink;
 
-    // Contadores de IDs
+    // Contadores
     private int contadorIdMario = 1;
     private int contadorIdZelda = 100;
 
-    /**
-     * Constructor de la interfaz gráfica.
-     */
     public InventarioGUI() {
         inicializarInventarios();
+        configurarVentana();
         inicializarComponentes();
         cargarItemsIniciales();
     }
 
-    /**
-     * Inicializa los inventarios de Mario y Link.
-     */
     private void inicializarInventarios() {
         inventarioMario = new Inventario(20, "Mario");
         inventarioLink = new Inventario(20, "Link");
     }
 
-    /**
-     * Inicializa todos los componentes de la interfaz.
-     */
-    private void inicializarComponentes() {
-        // Configuración de la ventana principal
-        setTitle("🎮 Sistema de Gestión de Ítems - Mario & Zelda");
-        setSize(1000, 700);
+    private void configurarVentana() {
+        setTitle("Nintendo Items Manager");
+        setSize(1200, 750);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Panel principal con BorderLayout
-        JPanel panelPrincipal = new JPanel(new BorderLayout(10, 10));
-        panelPrincipal.setBorder(new EmptyBorder(10, 10, 10, 10));
+        // Configurar Look and Feel
+        try {
+            UIManager.put("Button.background", CARD_BG);
+            UIManager.put("Button.foreground", TEXT_PRIMARY);
+            UIManager.put("Panel.background", BACKGROUND_DARK);
+            UIManager.put("TabbedPane.background", PANEL_BG);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        // Panel superior con título
-        JPanel panelTitulo = crearPanelTitulo();
-        panelPrincipal.add(panelTitulo, BorderLayout.NORTH);
+        getContentPane().setBackground(BACKGROUND_DARK);
+    }
 
-        // TabbedPane para Mario y Zelda
-        tabbedPane = new JTabbedPane();
-        tabbedPane.setFont(new Font("Arial", Font.BOLD, 14));
+    private void inicializarComponentes() {
+        JPanel panelPrincipal = new JPanel(new BorderLayout(15, 15));
+        panelPrincipal.setBackground(BACKGROUND_DARK);
+        panelPrincipal.setBorder(new EmptyBorder(20, 20, 20, 20));
 
-        // Pestaña de Mario
-        JPanel panelMario = crearPanelInventario("Mario", true);
-        tabbedPane.addTab("🍄 Mario", panelMario);
+        // Header
+        JPanel header = crearHeader();
+        panelPrincipal.add(header, BorderLayout.NORTH);
 
-        // Pestaña de Link/Zelda
-        JPanel panelLink = crearPanelInventario("Link", false);
-        tabbedPane.addTab("⚔️ Link", panelLink);
-
+        // Tabs
+        tabbedPane = crearTabbedPane();
         panelPrincipal.add(tabbedPane, BorderLayout.CENTER);
 
-        // Panel inferior con información
-        JPanel panelInferior = crearPanelInformacion();
-        panelPrincipal.add(panelInferior, BorderLayout.SOUTH);
+        // Info panel
+        JPanel infoPanel = crearPanelInfo();
+        panelPrincipal.add(infoPanel, BorderLayout.SOUTH);
 
         add(panelPrincipal);
     }
 
-    /**
-     * Crea el panel del título.
-     */
-    private JPanel crearPanelTitulo() {
-        JPanel panel = new JPanel();
-        panel.setBackground(new Color(70, 130, 180));
+    private JPanel crearHeader() {
+        JPanel header = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        JLabel titulo = new JLabel("🎮 SISTEMA DE GESTIÓN DE ÍTEMS - MARIO & ZELDA 🎮");
-        titulo.setFont(new Font("Arial", Font.BOLD, 20));
+                // Gradiente
+                GradientPaint gradient = new GradientPaint(
+                        0, 0, NINTENDO_RED,
+                        getWidth(), 0, new Color(180, 0, 14)
+                );
+                g2d.setPaint(gradient);
+                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+            }
+        };
+
+        header.setPreferredSize(new Dimension(0, 80));
+        header.setLayout(new BorderLayout());
+        header.setOpaque(false);
+
+        JLabel titulo = new JLabel("NINTENDO ITEMS MANAGER");
+        titulo.setFont(new Font("Segoe UI", Font.BOLD, 32));
         titulo.setForeground(Color.WHITE);
+        titulo.setHorizontalAlignment(SwingConstants.CENTER);
 
-        panel.add(titulo);
-        return panel;
+        JLabel subtitulo = new JLabel("Mario Bros & The Legend of Zelda");
+        subtitulo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        subtitulo.setForeground(new Color(255, 255, 255, 200));
+        subtitulo.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JPanel textos = new JPanel(new GridLayout(2, 1, 0, 5));
+        textos.setOpaque(false);
+        textos.add(titulo);
+        textos.add(subtitulo);
+
+        header.add(textos, BorderLayout.CENTER);
+
+        return header;
     }
 
-    /**
-     * Crea un panel de inventario para un personaje.
-     *
-     * @param personaje Nombre del personaje
-     * @param esMario   true si es Mario, false si es Link
-     */
-    private JPanel crearPanelInventario(String personaje, boolean esMario) {
-        JPanel panel = new JPanel(new BorderLayout(10, 10));
-        panel.setBorder(new EmptyBorder(10, 10, 10, 10));
+    private JTabbedPane crearTabbedPane() {
+        JTabbedPane tabs = new JTabbedPane() {
+            @Override
+            public void setSelectedIndex(int index) {
+                super.setSelectedIndex(index);
+                repaint();
+            }
+        };
 
-        // Panel izquierdo - Botones de creación
-        JPanel panelBotones = crearPanelBotones(esMario);
-        panel.add(panelBotones, BorderLayout.WEST);
+        tabs.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        tabs.setBackground(PANEL_BG);
+        tabs.setForeground(Color.BLACK); // Cambiado a negro para mejor contraste
 
-        // Panel central - Lista de items
-        JPanel panelLista = crearPanelLista(esMario);
+        // Panel Mario
+        JPanel panelMario = crearPanelPersonaje("Mario", MARIO_RED, true);
+        tabs.addTab("  MARIO  ", panelMario);
+
+        // Panel Link
+        JPanel panelLink = crearPanelPersonaje("Link", ZELDA_GREEN, false);
+        tabs.addTab("  LINK  ", panelLink);
+
+        // Personalizar tabs
+        tabs.setTabPlacement(JTabbedPane.TOP);
+
+        return tabs;
+    }
+
+    private JPanel crearPanelPersonaje(String personaje, Color colorTema, boolean esMario) {
+        JPanel panel = new JPanel(new BorderLayout(15, 15));
+        panel.setBackground(BACKGROUND_DARK);
+        panel.setBorder(new EmptyBorder(15, 15, 15, 15));
+
+        // Panel izquierdo - Creación de items
+        JPanel panelCreacion = crearPanelCreacion(colorTema, esMario);
+        panel.add(panelCreacion, BorderLayout.WEST);
+
+        // Panel central - Lista
+        JPanel panelLista = crearPanelLista(colorTema, esMario);
         panel.add(panelLista, BorderLayout.CENTER);
 
         // Panel derecho - Acciones
-        JPanel panelAcciones = crearPanelAcciones(esMario);
+        JPanel panelAcciones = crearPanelAcciones(colorTema, esMario);
         panel.add(panelAcciones, BorderLayout.EAST);
 
         return panel;
     }
 
-    /**
-     * Crea el panel de botones para crear ítems.
-     */
-    private JPanel crearPanelBotones(boolean esMario) {
+    private JPanel crearPanelCreacion(Color colorTema, boolean esMario) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(Color.GRAY, 2),
-                "➕ Crear Ítems",
-                TitledBorder.LEFT,
-                TitledBorder.TOP,
-                new Font("Arial", Font.BOLD, 14)
+        panel.setBackground(CARD_BG);
+        panel.setBorder(BorderFactory.createCompoundBorder(
+                new LineBorder(colorTema, 2, true),
+                new EmptyBorder(15, 15, 15, 15)
         ));
+        panel.setPreferredSize(new Dimension(220, 0));
+
+        JLabel titulo = new JLabel("[+] Crear Items");
+        titulo.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        titulo.setForeground(colorTema);
+        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(titulo);
+        panel.add(Box.createRigidArea(new Dimension(0, 15)));
 
         if (esMario) {
-            panel.add(crearBoton("🍄 Power-Up", e -> crearPowerUp()));
-            panel.add(Box.createRigidArea(new Dimension(0, 5)));
-            panel.add(crearBoton("🪙 Moneda", e -> crearMoneda()));
-            panel.add(Box.createRigidArea(new Dimension(0, 5)));
-            panel.add(crearBoton("🟢 Tubería", e -> crearTuberia()));
+            panel.add(crearBotonModerno("Power-Up", colorTema, e -> crearPowerUp()));
+            panel.add(Box.createRigidArea(new Dimension(0, 10)));
+            panel.add(crearBotonModerno("Moneda", ZELDA_GOLD, e -> crearMoneda()));
+            panel.add(Box.createRigidArea(new Dimension(0, 10)));
+            panel.add(crearBotonModerno("Tuberia", MARIO_BLUE, e -> crearTuberia()));
         } else {
-            panel.add(crearBoton("⚔️ Arma", e -> crearArma()));
-            panel.add(Box.createRigidArea(new Dimension(0, 5)));
-            panel.add(crearBoton("🛡️ Escudo", e -> crearEscudo()));
-            panel.add(Box.createRigidArea(new Dimension(0, 5)));
-            panel.add(crearBoton("🧪 Poción", e -> crearPocion()));
-            panel.add(Box.createRigidArea(new Dimension(0, 5)));
-            panel.add(crearBoton("💎 Rupia", e -> crearRupia()));
+            panel.add(crearBotonModerno("Arma", colorTema, e -> crearArma()));
+            panel.add(Box.createRigidArea(new Dimension(0, 10)));
+            panel.add(crearBotonModerno("Escudo", new Color(70, 130, 180), e -> crearEscudo()));
+            panel.add(Box.createRigidArea(new Dimension(0, 10)));
+            panel.add(crearBotonModerno("Pocion", new Color(220, 20, 60), e -> crearPocion()));
+            panel.add(Box.createRigidArea(new Dimension(0, 10)));
+            panel.add(crearBotonModerno("Rupia", ZELDA_GOLD, e -> crearRupia()));
         }
+
+        panel.add(Box.createVerticalGlue());
 
         return panel;
     }
 
-    /**
-     * Crea el panel con la lista de ítems.
-     */
-    private JPanel crearPanelLista(boolean esMario) {
-        JPanel panel = new JPanel(new BorderLayout(5, 5));
+    private JPanel crearPanelLista(Color colorTema, boolean esMario) {
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
+        panel.setBackground(CARD_BG);
+        panel.setBorder(BorderFactory.createCompoundBorder(
+                new LineBorder(colorTema, 2, true),
+                new EmptyBorder(15, 15, 15, 15)
+        ));
 
-        // Label de capacidad
-        JLabel labelCapacidad;
+        // Header con capacidad
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(CARD_BG);
+
+        JLabel tituloLista = new JLabel("[Inventario]");
+        tituloLista.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        tituloLista.setForeground(colorTema);
+
         if (esMario) {
-            labelCapacidadMario = new JLabel("Capacidad: 0/20");
-            labelCapacidadMario.setFont(new Font("Arial", Font.BOLD, 12));
-            labelCapacidad = labelCapacidadMario;
-        } else {
-            labelCapacidadLink = new JLabel("Capacidad: 0/20");
-            labelCapacidadLink.setFont(new Font("Arial", Font.BOLD, 12));
-            labelCapacidad = labelCapacidadLink;
-        }
+            labelCapacidadMario = new JLabel("0/20");
+            labelCapacidadMario.setFont(new Font("Segoe UI", Font.BOLD, 14));
+            labelCapacidadMario.setForeground(TEXT_SECONDARY);
+            headerPanel.add(tituloLista, BorderLayout.WEST);
+            headerPanel.add(labelCapacidadMario, BorderLayout.EAST);
 
-        panel.add(labelCapacidad, BorderLayout.NORTH);
-
-        // Lista de items
-        if (esMario) {
+            // Inicializar modelo y lista para Mario
             listModelMario = new DefaultListModel<>();
-            listaMario = new JList<>(listModelMario);
-            listaMario.setFont(new Font("Monospaced", Font.PLAIN, 11));
-            JScrollPane scroll = new JScrollPane(listaMario);
-            panel.add(scroll, BorderLayout.CENTER);
+            listaMario = crearListaEstilizada(listModelMario);
         } else {
+            labelCapacidadLink = new JLabel("0/20");
+            labelCapacidadLink.setFont(new Font("Segoe UI", Font.BOLD, 14));
+            labelCapacidadLink.setForeground(TEXT_SECONDARY);
+            headerPanel.add(tituloLista, BorderLayout.WEST);
+            headerPanel.add(labelCapacidadLink, BorderLayout.EAST);
+
+            // Inicializar modelo y lista para Link
             listModelLink = new DefaultListModel<>();
-            listaLink = new JList<>(listModelLink);
-            listaLink.setFont(new Font("Monospaced", Font.PLAIN, 11));
-            JScrollPane scroll = new JScrollPane(listaLink);
-            panel.add(scroll, BorderLayout.CENTER);
+            listaLink = crearListaEstilizada(listModelLink);
         }
 
-        return panel;
-    }
+        panel.add(headerPanel, BorderLayout.NORTH);
 
-    /**
-     * Crea el panel de acciones sobre los ítems.
-     */
-    private JPanel crearPanelAcciones(boolean esMario) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(Color.GRAY, 2),
-                "⚡ Acciones",
-                TitledBorder.LEFT,
-                TitledBorder.TOP,
-                new Font("Arial", Font.BOLD, 14)
-        ));
-
-        panel.add(crearBoton("✅ Usar Item", e -> usarItem(esMario)));
-        panel.add(Box.createRigidArea(new Dimension(0, 5)));
-        panel.add(crearBoton("❌ Eliminar", e -> eliminarItem(esMario)));
-        panel.add(Box.createRigidArea(new Dimension(0, 5)));
-        panel.add(crearBoton("🔍 Info", e -> mostrarInfo(esMario)));
-        panel.add(Box.createRigidArea(new Dimension(0, 10)));
-        panel.add(crearBoton("🗑️ Limpiar Todo", e -> limpiarInventario(esMario)));
-
-        return panel;
-    }
-
-    /**
-     * Crea el panel de información en la parte inferior.
-     */
-    private JPanel crearPanelInformacion() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(Color.GRAY, 2),
-                "📋 Información",
-                TitledBorder.LEFT,
-                TitledBorder.TOP,
-                new Font("Arial", Font.BOLD, 12)
-        ));
-
-        areaInfo = new JTextArea(6, 40);
-        areaInfo.setEditable(false);
-        areaInfo.setFont(new Font("Monospaced", Font.PLAIN, 11));
-        areaInfo.setText("Bienvenido al Sistema de Gestión de Ítems\n" +
-                "Usa los botones para crear, usar y gestionar ítems.");
-
-        JScrollPane scroll = new JScrollPane(areaInfo);
+        // Lista
+        JList<String> lista = esMario ? listaMario : listaLink;
+        JScrollPane scroll = new JScrollPane(lista);
+        estilizarScrollPane(scroll, colorTema);
         panel.add(scroll, BorderLayout.CENTER);
 
         return panel;
     }
 
-    /**
-     * Crea un botón estilizado.
-     */
-    private JButton crearBoton(String texto, ActionListener listener) {
-        JButton boton = new JButton(texto);
-        boton.setFont(new Font("Arial", Font.BOLD, 12));
+    private JList<String> crearListaEstilizada(DefaultListModel<String> modelo) {
+        JList<String> lista = new JList<>(modelo);
+        lista.setFont(new Font("Consolas", Font.PLAIN, 13));
+        lista.setBackground(new Color(45, 49, 57));
+        lista.setForeground(TEXT_PRIMARY);
+        lista.setSelectionBackground(NINTENDO_RED);
+        lista.setSelectionForeground(Color.WHITE);
+        lista.setBorder(new EmptyBorder(5, 10, 5, 10));
+        lista.setFixedCellHeight(30);
+        return lista;
+    }
+
+    private void estilizarScrollPane(JScrollPane scroll, Color colorTema) {
+        scroll.setBorder(new LineBorder(colorTema.darker(), 1, true));
+        scroll.getVerticalScrollBar().setBackground(PANEL_BG);
+        scroll.getHorizontalScrollBar().setBackground(PANEL_BG);
+    }
+
+    private JPanel crearPanelAcciones(Color colorTema, boolean esMario) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(CARD_BG);
+        panel.setBorder(BorderFactory.createCompoundBorder(
+                new LineBorder(colorTema, 2, true),
+                new EmptyBorder(15, 15, 15, 15)
+        ));
+        panel.setPreferredSize(new Dimension(200, 0));
+
+        JLabel titulo = new JLabel("[ Acciones ]");
+        titulo.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        titulo.setForeground(colorTema);
+        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(titulo);
+        panel.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        panel.add(crearBotonModerno("Usar", new Color(46, 204, 113), e -> usarItem(esMario)));
+        panel.add(Box.createRigidArea(new Dimension(0, 10)));
+        panel.add(crearBotonModerno("Info", new Color(52, 152, 219), e -> mostrarInfo(esMario)));
+        panel.add(Box.createRigidArea(new Dimension(0, 10)));
+        panel.add(crearBotonModerno("Eliminar", new Color(231, 76, 60), e -> eliminarItem(esMario)));
+        panel.add(Box.createRigidArea(new Dimension(0, 20)));
+        panel.add(crearBotonModerno("Limpiar Todo", new Color(149, 165, 166), e -> limpiarInventario(esMario)));
+
+        panel.add(Box.createVerticalGlue());
+
+        return panel;
+    }
+
+    private JButton crearBotonModerno(String texto, Color color, ActionListener listener) {
+        JButton boton = new JButton(texto) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                if (getModel().isPressed()) {
+                    g2d.setColor(color.darker());
+                } else if (getModel().isRollover()) {
+                    g2d.setColor(color.brighter());
+                } else {
+                    g2d.setColor(color);
+                }
+
+                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
+
+                g2d.setColor(getForeground());
+                g2d.setFont(getFont());
+                FontMetrics fm = g2d.getFontMetrics();
+                int x = (getWidth() - fm.stringWidth(getText())) / 2;
+                int y = ((getHeight() - fm.getHeight()) / 2) + fm.getAscent();
+                g2d.drawString(getText(), x, y);
+            }
+        };
+
+        boton.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        boton.setForeground(Color.WHITE);
+        boton.setFocusPainted(false);
+        boton.setBorderPainted(false);
+        boton.setContentAreaFilled(false);
+        boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         boton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        boton.setMaximumSize(new Dimension(180, 35));
+        boton.setMaximumSize(new Dimension(180, 40));
+        boton.setPreferredSize(new Dimension(180, 40));
         boton.addActionListener(listener);
+
         return boton;
     }
 
-    /**
-     * Carga algunos ítems iniciales para demostración.
-     */
-    private void cargarItemsIniciales() {
-        try {
-            // Items de Mario
-            inventarioMario.agregarItem(new PowerUp(contadorIdMario++, "Super Mushroom",
-                    "Te hace crecer", Rareza.COMUN, 10, 0, TipoEfecto.ATAQUE, 2.0));
-            inventarioMario.agregarItem(new PowerUp(contadorIdMario++, "Fire Flower",
-                    "Lanza fuego", Rareza.RARO, 25, 30, TipoEfecto.ATAQUE, 3.0));
-            inventarioMario.agregarItem(new Moneda(contadorIdMario++, 10));
+    private JPanel crearPanelInfo() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(CARD_BG);
+        panel.setBorder(BorderFactory.createCompoundBorder(
+                new LineBorder(NINTENDO_RED, 2, true),
+                new EmptyBorder(15, 15, 15, 15)
+        ));
+        panel.setPreferredSize(new Dimension(0, 150));
 
-            // Items de Link
-            inventarioLink.agregarItem(new Arma(contadorIdZelda++, "Master Sword",
-                    "Espada legendaria", Rareza.LEGENDARIO, 10000, 10, 50, 100));
-            inventarioLink.agregarItem(new Escudo(contadorIdZelda++, "Hylian Shield",
-                    "Escudo de Hyrule", Rareza.EPICO, 500, 5, 30, 80));
-            inventarioLink.agregarItem(new Pocion(contadorIdZelda++, "Poción Roja",
-                    "Restaura vida", Rareza.RARO, 100, 1, TipoEfecto.CURACION, 100));
-            inventarioLink.agregarItem(new Rupia(contadorIdZelda++, 100, "Plata"));
+        JLabel titulo = new JLabel("[ Panel de Informacion ]");
+        titulo.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        titulo.setForeground(NINTENDO_RED);
+        panel.add(titulo, BorderLayout.NORTH);
 
-            actualizarListas();
+        areaInfo = new JTextArea();
+        areaInfo.setEditable(false);
+        areaInfo.setFont(new Font("Consolas", Font.PLAIN, 12));
+        areaInfo.setBackground(new Color(45, 49, 57));
+        areaInfo.setForeground(TEXT_PRIMARY);
+        areaInfo.setLineWrap(true);
+        areaInfo.setWrapStyleWord(true);
+        areaInfo.setBorder(new EmptyBorder(10, 10, 10, 10));
+        areaInfo.setText(">> Bienvenido al Sistema de Gestion de Items de Nintendo\n\n" +
+                ">> Selecciona una pestana (Mario o Link)\n" +
+                ">> Usa los botones para crear items\n" +
+                ">> Haz clic en un item para ver sus acciones");
 
-        } catch (InventarioLlenoException e) {
-            mostrarError(e.getMessage());
-        }
+        JScrollPane scroll = new JScrollPane(areaInfo);
+        scroll.setBorder(null);
+        panel.add(scroll, BorderLayout.CENTER);
+
+        return panel;
+    }
+
+    private boolean esMarioActual() {
+        return tabbedPane.getSelectedIndex() == 0;
     }
 
     // ============================================
-    // MÉTODOS PARA CREAR ÍTEMS
+    // MÉTODOS PARA CREAR ÍTEMS (sin cambios lógicos, solo los llamo)
     // ============================================
 
     private void crearPowerUp() {
@@ -332,7 +439,7 @@ public class InventarioGUI extends JFrame {
 
                 inventarioMario.agregarItem(powerUp);
                 actualizarListas();
-                areaInfo.setText("✅ " + seleccion + " creado y añadido al inventario de Mario!");
+                areaInfo.setText("[OK] " + seleccion + " creado!\n\n" + powerUp.toString());
 
             } catch (InventarioLlenoException e) {
                 mostrarError(e.getMessage());
@@ -353,7 +460,7 @@ public class InventarioGUI extends JFrame {
                 Moneda moneda = new Moneda(contadorIdMario++, cantidad);
                 inventarioMario.agregarItem(moneda);
                 actualizarListas();
-                areaInfo.setText("✅ Moneda(s) x" + cantidad + " añadida(s) al inventario!");
+                areaInfo.setText("[OK] Moneda(s) x" + cantidad + " anadida(s)!\n\n" + moneda.toString());
 
             } catch (NumberFormatException e) {
                 mostrarError("Debe ingresar un número válido");
@@ -375,7 +482,7 @@ public class InventarioGUI extends JFrame {
                     Tuberia tuberia = new Tuberia(contadorIdMario++, nombre, destino, respuesta == JOptionPane.YES_OPTION);
                     inventarioMario.agregarItem(tuberia);
                     actualizarListas();
-                    areaInfo.setText("✅ " + nombre + " creada y añadida al inventario!");
+                    areaInfo.setText("[OK] " + nombre + " creada!\n\n" + tuberia.toString());
 
                 } catch (InventarioLlenoException e) {
                     mostrarError(e.getMessage());
@@ -414,7 +521,7 @@ public class InventarioGUI extends JFrame {
 
                 inventarioLink.agregarItem(arma);
                 actualizarListas();
-                areaInfo.setText("✅ " + seleccion + " creada y añadida al inventario de Link!");
+                areaInfo.setText("✅ " + seleccion + " creada!\n\n" + arma.toString());
 
             } catch (InventarioLlenoException e) {
                 mostrarError(e.getMessage());
@@ -448,7 +555,7 @@ public class InventarioGUI extends JFrame {
 
                 inventarioLink.agregarItem(escudo);
                 actualizarListas();
-                areaInfo.setText("✅ " + seleccion + " creado y añadido al inventario!");
+                areaInfo.setText("✅ " + seleccion + " creado!\n\n" + escudo.toString());
 
             } catch (InventarioLlenoException e) {
                 mostrarError(e.getMessage());
@@ -482,7 +589,7 @@ public class InventarioGUI extends JFrame {
 
                 inventarioLink.agregarItem(pocion);
                 actualizarListas();
-                areaInfo.setText("✅ " + seleccion + " creada y añadida al inventario!");
+                areaInfo.setText("✅ " + seleccion + " creada!\n\n" + pocion.toString());
 
             } catch (InventarioLlenoException e) {
                 mostrarError(e.getMessage());
@@ -522,7 +629,7 @@ public class InventarioGUI extends JFrame {
 
                 inventarioLink.agregarItem(rupia);
                 actualizarListas();
-                areaInfo.setText("✅ Rupia añadida al inventario!");
+                areaInfo.setText("[OK] Rupia anadida!\n\n" + rupia.toString());
 
             } catch (InventarioLlenoException e) {
                 mostrarError(e.getMessage());
@@ -549,26 +656,38 @@ public class InventarioGUI extends JFrame {
         if (indice < items.size()) {
             Item item = items.get(indice);
 
-            // Capturar la salida del método usar()
-            areaInfo.setText("⚡ USANDO: " + item.getNombre() + "\n");
-            areaInfo.append("─────────────────────────────\n");
+            areaInfo.setText(">> USANDO: " + item.getNombre() + "\n");
+            areaInfo.append("================================\n\n");
 
-            // Simulamos usar el item y mostramos info
             if (item instanceof Arma) {
                 Arma arma = (Arma) item;
-                areaInfo.append("⚔️ Atacando con " + arma.getNombre() + "\n");
-                areaInfo.append("Daño: " + arma.getDanio() + "\n");
-                areaInfo.append("Durabilidad: " + arma.getDurabilidad() + "/" + arma.getDurabilidadMaxima());
+                arma.usar();
+                areaInfo.append("[Arma] Tipo: Arma\n");
+                areaInfo.append("Dano: " + arma.getDanio() + "\n");
+                areaInfo.append("Durabilidad: " + arma.getDurabilidad() + "/" + arma.getDurabilidadMaxima() + "\n");
             } else if (item instanceof Escudo) {
                 Escudo escudo = (Escudo) item;
-                areaInfo.append("🛡️ Bloqueando con " + escudo.getNombre() + "\n");
+                escudo.usar();
+                areaInfo.append("[Escudo] Tipo: Escudo\n");
                 areaInfo.append("Defensa: " + escudo.getDefensa() + "\n");
-                areaInfo.append("Durabilidad: " + escudo.getDurabilidad() + "/" + escudo.getDurabilidadMaxima());
+                areaInfo.append("Durabilidad: " + escudo.getDurabilidad() + "/" + escudo.getDurabilidadMaxima() + "\n");
+            } else if (item instanceof PowerUp) {
+                PowerUp powerUp = (PowerUp) item;
+                powerUp.usar();
+                areaInfo.append("[PowerUp] Tipo: Power-Up\n");
+                areaInfo.append("Efecto: " + powerUp.getTipoEfecto().getDescripcion() + "\n");
+                areaInfo.append("Multiplicador: x" + powerUp.getMultiplicador() + "\n");
+            } else if (item instanceof Pocion) {
+                Pocion pocion = (Pocion) item;
+                pocion.usar();
+                areaInfo.append("[Pocion] Tipo: Pocion\n");
+                areaInfo.append("Efecto: " + pocion.getTipoEfecto().getDescripcion() + "\n");
+                areaInfo.append("Potencia: +" + pocion.getPotencia() + "\n");
             } else {
-                areaInfo.append(item.toString());
+                item.usar();
+                areaInfo.append("\n" + item.toString());
             }
 
-            item.usar();
             actualizarListas();
         }
     }
@@ -587,17 +706,22 @@ public class InventarioGUI extends JFrame {
 
         if (indice < items.size()) {
             Item item = items.get(indice);
+
+            // Diálogo personalizado
             int confirmacion = JOptionPane.showConfirmDialog(
                     this,
-                    "¿Eliminar " + item.getNombre() + "?",
-                    "Confirmar eliminación",
-                    JOptionPane.YES_NO_OPTION
+                    "Estas seguro de eliminar este item?\n\n" + item.getNombre(),
+                    "[!] Confirmar Eliminacion",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE
             );
 
             if (confirmacion == JOptionPane.YES_OPTION) {
                 inventario.eliminarItem(item.getId());
                 actualizarListas();
-                areaInfo.setText("❌ " + item.getNombre() + " eliminado del inventario");
+                areaInfo.setText("[X] ITEM ELIMINADO\n");
+                areaInfo.append("================================\n\n");
+                areaInfo.append(item.getNombre() + " ha sido eliminado del inventario.");
             }
         }
     }
@@ -616,26 +740,62 @@ public class InventarioGUI extends JFrame {
 
         if (indice < items.size()) {
             Item item = items.get(indice);
-            areaInfo.setText("📋 INFORMACIÓN DEL ÍTEM\n");
-            areaInfo.append("═══════════════════════════\n");
-            areaInfo.append(item.toString() + "\n");
+
+            areaInfo.setText("[i] INFORMACION DETALLADA\n");
+            areaInfo.append("================================\n\n");
+            areaInfo.append("Nombre: " + item.getNombre() + "\n");
+            areaInfo.append("ID: " + item.getId() + "\n");
+            areaInfo.append("Rareza: " + item.getRareza().getNombre() + "\n");
+            areaInfo.append("Valor: " + item.getValor() + "\n");
+            areaInfo.append("Universo: " + item.getUniverso().getNombreCompleto() + "\n");
+            areaInfo.append("Descripcion: " + item.getDescripcion() + "\n\n");
+
+            // Info específica según tipo
+            if (item instanceof Arma) {
+                Arma arma = (Arma) item;
+                areaInfo.append("[ESTADISTICAS DE ARMA]\n");
+                areaInfo.append("  - Dano: " + arma.getDanio() + "\n");
+                areaInfo.append("  - Durabilidad: " + arma.getDurabilidad() + "/" + arma.getDurabilidadMaxima() + "\n");
+                areaInfo.append("  - Nivel requerido: " + arma.getNivelRequerido() + "\n");
+            } else if (item instanceof Escudo) {
+                Escudo escudo = (Escudo) item;
+                areaInfo.append("[ESTADISTICAS DE ESCUDO]\n");
+                areaInfo.append("  - Defensa: " + escudo.getDefensa() + "\n");
+                areaInfo.append("  - Durabilidad: " + escudo.getDurabilidad() + "/" + escudo.getDurabilidadMaxima() + "\n");
+                areaInfo.append("  - Nivel requerido: " + escudo.getNivelRequerido() + "\n");
+            } else if (item instanceof PowerUp) {
+                PowerUp powerUp = (PowerUp) item;
+                areaInfo.append("[ESTADISTICAS DE POWER-UP]\n");
+                areaInfo.append("  - Efecto: " + powerUp.getTipoEfecto().getDescripcion() + "\n");
+                areaInfo.append("  - Multiplicador: x" + powerUp.getMultiplicador() + "\n");
+                areaInfo.append("  - Duracion: " + powerUp.getDuracion() + "s\n");
+            } else if (item instanceof Pocion) {
+                Pocion pocion = (Pocion) item;
+                areaInfo.append("[ESTADISTICAS DE POCION]\n");
+                areaInfo.append("  - Efecto: " + pocion.getTipoEfecto().getDescripcion() + "\n");
+                areaInfo.append("  - Potencia: +" + pocion.getPotencia() + "\n");
+                areaInfo.append("  - Nivel requerido: " + pocion.getNivelRequerido() + "\n");
+            }
         }
     }
 
     private void limpiarInventario(boolean esMario) {
         int confirmacion = JOptionPane.showConfirmDialog(
                 this,
-                "¿Eliminar TODOS los ítems del inventario?",
-                "Confirmar limpieza",
+                "[!] Estas seguro de eliminar TODOS los items?\n\nEsta accion no se puede deshacer.",
+                "Confirmar Limpieza Total",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE
         );
 
         if (confirmacion == JOptionPane.YES_OPTION) {
             Inventario inventario = esMario ? inventarioMario : inventarioLink;
+            String personaje = esMario ? "Mario" : "Link";
             inventario.limpiarInventario();
             actualizarListas();
-            areaInfo.setText("🗑️ Inventario limpiado completamente");
+            areaInfo.setText("[!] INVENTARIO LIMPIADO\n");
+            areaInfo.append("================================\n\n");
+            areaInfo.append("El inventario de " + personaje + " ha sido vaciado completamente.");
         }
     }
 
@@ -644,27 +804,67 @@ public class InventarioGUI extends JFrame {
     // ============================================
 
     private void actualizarListas() {
-        // Actualizar lista de Mario
+        // Actualizar Mario
         listModelMario.clear();
         List<Item> itemsMario = inventarioMario.obtenerTodosLosItems();
         for (Item item : itemsMario) {
-            listModelMario.addElement(item.getNombre() + " - " + item.getRareza().getNombre());
+            String icono = obtenerIcono(item);
+            listModelMario.addElement(icono + " " + item.getNombre() + " (" + item.getRareza().getNombre() + ")");
         }
-        labelCapacidadMario.setText("Capacidad: " + inventarioMario.getCapacidadUsada() +
-                "/" + inventarioMario.getCapacidadMaxima());
+        labelCapacidadMario.setText(inventarioMario.getCapacidadUsada() + "/" + inventarioMario.getCapacidadMaxima());
 
-        // Actualizar lista de Link
+        // Actualizar Link
         listModelLink.clear();
         List<Item> itemsLink = inventarioLink.obtenerTodosLosItems();
         for (Item item : itemsLink) {
-            listModelLink.addElement(item.getNombre() + " - " + item.getRareza().getNombre());
+            String icono = obtenerIcono(item);
+            listModelLink.addElement(icono + " " + item.getNombre() + " (" + item.getRareza().getNombre() + ")");
         }
-        labelCapacidadLink.setText("Capacidad: " + inventarioLink.getCapacidadUsada() +
-                "/" + inventarioLink.getCapacidadMaxima());
+        labelCapacidadLink.setText(inventarioLink.getCapacidadUsada() + "/" + inventarioLink.getCapacidadMaxima());
+    }
+
+    private String obtenerIcono(Item item) {
+        if (item instanceof PowerUp) return "[P]";
+        if (item instanceof Moneda) return "[C]";
+        if (item instanceof Tuberia) return "[T]";
+        if (item instanceof Arma) return "[W]";
+        if (item instanceof Escudo) return "[S]";
+        if (item instanceof Pocion) return "[H]";
+        if (item instanceof Rupia) return "[R]";
+        return "[I]";
     }
 
     private void mostrarError(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(
+                this,
+                mensaje,
+                "[!] Error",
+                JOptionPane.ERROR_MESSAGE
+        );
+    }
+
+    private void cargarItemsIniciales() {
+        try {
+            // Items de Mario
+            inventarioMario.agregarItem(new PowerUp(contadorIdMario++, "Super Mushroom",
+                    "Te hace crecer", Rareza.COMUN, 10, 0, TipoEfecto.ATAQUE, 2.0));
+            inventarioMario.agregarItem(new PowerUp(contadorIdMario++, "Fire Flower",
+                    "Lanza fuego", Rareza.RARO, 25, 30, TipoEfecto.ATAQUE, 3.0));
+            inventarioMario.agregarItem(new Moneda(contadorIdMario++, 10));
+
+            // Items de Link
+            inventarioLink.agregarItem(new Arma(contadorIdZelda++, "Master Sword",
+                    "Espada legendaria", Rareza.LEGENDARIO, 10000, 10, 50, 100));
+            inventarioLink.agregarItem(new Escudo(contadorIdZelda++, "Hylian Shield",
+                    "Escudo de Hyrule", Rareza.EPICO, 500, 5, 30, 80));
+            inventarioLink.agregarItem(new Pocion(contadorIdZelda++, "Poción Roja",
+                    "Restaura vida", Rareza.RARO, 100, 1, TipoEfecto.CURACION, 100));
+
+            actualizarListas();
+
+        } catch (InventarioLlenoException e) {
+            mostrarError(e.getMessage());
+        }
     }
 
     // ============================================
@@ -672,14 +872,14 @@ public class InventarioGUI extends JFrame {
     // ============================================
 
     public static void main(String[] args) {
-        // Usar el Look and Feel del sistema
+        // Configurar Look and Feel
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        // Crear y mostrar la GUI en el Event Dispatch Thread
+        // Crear y mostrar GUI
         SwingUtilities.invokeLater(() -> {
             InventarioGUI gui = new InventarioGUI();
             gui.setVisible(true);
