@@ -231,26 +231,26 @@ The console version demonstrates all features through automated tests:
 - Tests exception handling
 
 
-### 📚 Classes Overview
-# Enumerations
+## 📚 Classes Overview
+### Enumerations
 
 - Rareza: Item rarity levels (Common, Rare, Epic, Legendary)
 - TipoEfecto: Effect types (Healing, Attack, Defense, Speed, Invincibility, Currency, Transport)
 - UniversoJuego: Game universes (Mario, Zelda)
 
-# Base Classes
+### Base Classes
 
 - IItem: Interface defining the item contract
 - Item: Abstract base class with common attributes
 
-# Mario Universe
+### Mario Universe
 
 - ItemMario: Abstract class for Mario items (adds duration attribute)
 - PowerUp: Power-ups with effects and multipliers
 - Moneda: Collectible coins
 - Tuberia: Transport pipes with destinations
 
-# Zelda Universe
+### Zelda Universe
 
 - ItemZelda: Abstract class for Zelda items (adds level requirement)
 - Arma: Weapons with damage and durability
@@ -258,12 +258,12 @@ The console version demonstrates all features through automated tests:
 - Pocion: Potions with healing effects
 - Rupia: Currency with color-coded values
 
-# Management
+### Management
 
 - Inventario: Inventory management with capacity limits
 - InventarioLlenoException: Custom exception for full inventory
 
-# User Interface
+### User Interface
 
 - InventarioGUI: Modern Swing-based graphical interface
 - Main: Console-based demonstration
@@ -292,4 +292,5 @@ Email: fitipaldimateo85@gmail.com
 
 
 Made with ❤️ by a DAM student in Madrid, Spain
+
 
