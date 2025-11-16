@@ -1,24 +1,22 @@
-### Nintendo Items Manager
-A comprehensive inventory management system for items from Super Mario Bros and The Legend of Zelda universes, built with Java and featuring a modern Swing GUI.
---- 
+# Nintendo Items Manager
+A comprehensive inventory management system for items from Super Mario Bros and The Legend of Zelda universes, built with Java and featuring a modern Swing GUI. 
 
 ## 📋 Table of Contents
 
-# About the Project
-Features
-Technologies
-Project Structure
-Getting Started
+### About the Project
+- Features
+- Technologies
+- Project Structure
+- Getting Started
 
-Prerequisites
-Installation
-Running the Project
+- Prerequisites
+- Installation
+- Running the Project
 
 
-Usage
-Classes Overview
-Contact
----
+- Usage
+- Classes Overview
+- Contact
 
 ## 🎮 About the Project
 Nintendo Items Manager is an Object-Oriented Programming (OOP) project developed in Java that implements a complete item management system for two iconic Nintendo franchises: Super Mario Bros and The Legend of Zelda.
@@ -292,5 +290,6 @@ Email: fitipaldimateo85@gmail.com
 
 
 Made with ❤️ by a DAM student in Madrid, Spain
+
 
 
