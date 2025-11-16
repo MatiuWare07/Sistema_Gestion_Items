@@ -151,16 +151,16 @@ Set the project SDK if needed
 
 
 
-# Running the Project
+## Running the Project
 Option 1: GUI Version (Recommended)
 From Command Line:
 bash# Navigate to src directory
 cd src
 
-# Compile all classes
+## Compile all classes
 javac com/nintendo/items/**/*.java
 
-# Run the GUI
+## Run the GUI
 java com.nintendo.items.gui.InventarioGUI
 From IntelliJ IDEA:
 
@@ -173,10 +173,10 @@ From Command Line:
 bash# Navigate to src directory
 cd src
 
-# Compile all classes
+## Compile all classes
 javac com/nintendo/items/**/*.java
 
-# Run the console version
+## Run the console version
 java com.nintendo.items.Main
 From IntelliJ IDEA:
 
@@ -290,6 +290,7 @@ Email: fitipaldimateo85@gmail.com
 
 
 Made with ❤️ by a DAM student in Madrid, Spain
+
 
 
 
