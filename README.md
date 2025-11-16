@@ -17,8 +17,6 @@ Running the Project
 
 Usage
 Classes Overview
-Contributing
-License
 Contact
 ---
 
@@ -135,7 +133,7 @@ Prerequisites
 - IntelliJ IDEA (recommended) or Eclipse
 - Basic knowledge of Java and OOP concepts
 
-### Installation
+## Installation
 
 1. Clone the repository
 
@@ -190,22 +188,21 @@ Select Run 'Main.main()'
 
 
 ## 💻 Usage
-GUI Application
+- 1. GUI Application
 
-Launch the application
+- 2. Launch the application
 
-The main window will open with two tabs: MARIO and LINK
-
-
-### Create items
-
-Click on the creation buttons on the left panel
-Select the item type from the dropdown
-Follow the prompts to customize your item
+- 3. The main window will open with two tabs: MARIO and LINK
 
 
-### Manage inventory
+## Create items
 
+- 1. Click on the creation buttons on the left panel
+- 2. Select the item type from the dropdown
+- 3. Follow the prompts to customize your item
+
+
+## Manage inventory
 Select an item from the list
 Use action buttons on the right:
 
@@ -214,128 +211,85 @@ Info: View detailed item information
 Eliminar (Delete): Remove the item from inventory
 Limpiar Todo (Clear All): Empty the entire inventory
 
+--- 
 
 
-
-### View information
+## View information
 
 Check the bottom panel for detailed feedback
 Monitor capacity in the inventory header (e.g., "5/20")
 
 
 
-Console Application
+## Console Application
 The console version demonstrates all features through automated tests:
 
-Creates sample items
-Shows inventory contents
-Tests item usage
-Demonstrates durability system
-Tests exception handling
+- Creates sample items
+- Shows inventory contents
+- Tests item usage
+- Demonstrates durability system
+- Tests exception handling
 
 
 ### 📚 Classes Overview
-Enumerations
+# Enumerations
 
-Rareza: Item rarity levels (Common, Rare, Epic, Legendary)
-TipoEfecto: Effect types (Healing, Attack, Defense, Speed, Invincibility, Currency, Transport)
-UniversoJuego: Game universes (Mario, Zelda)
+- Rareza: Item rarity levels (Common, Rare, Epic, Legendary)
+- TipoEfecto: Effect types (Healing, Attack, Defense, Speed, Invincibility, Currency, Transport)
+- UniversoJuego: Game universes (Mario, Zelda)
 
-Base Classes
+# Base Classes
 
-IItem: Interface defining the item contract
-Item: Abstract base class with common attributes
+- IItem: Interface defining the item contract
+- Item: Abstract base class with common attributes
 
-Mario Universe
+# Mario Universe
 
-ItemMario: Abstract class for Mario items (adds duration attribute)
-PowerUp: Power-ups with effects and multipliers
-Moneda: Collectible coins
-Tuberia: Transport pipes with destinations
+- ItemMario: Abstract class for Mario items (adds duration attribute)
+- PowerUp: Power-ups with effects and multipliers
+- Moneda: Collectible coins
+- Tuberia: Transport pipes with destinations
 
-Zelda Universe
+# Zelda Universe
 
-ItemZelda: Abstract class for Zelda items (adds level requirement)
-Arma: Weapons with damage and durability
-Escudo: Shields with defense and durability
-Pocion: Potions with healing effects
-Rupia: Currency with color-coded values
+- ItemZelda: Abstract class for Zelda items (adds level requirement)
+- Arma: Weapons with damage and durability
+- Escudo: Shields with defense and durability
+- Pocion: Potions with healing effects
+- Rupia: Currency with color-coded values
 
-Management
+# Management
 
-Inventario: Inventory management with capacity limits
-InventarioLlenoException: Custom exception for full inventory
+- Inventario: Inventory management with capacity limits
+- InventarioLlenoException: Custom exception for full inventory
 
-User Interface
+# User Interface
 
-InventarioGUI: Modern Swing-based graphical interface
-Main: Console-based demonstration
+- InventarioGUI: Modern Swing-based graphical interface
+- Main: Console-based demonstration
+--- 
+## 👤 Contact
+Mateo Fitipaldi
 
+GitHub: @MatiuWare07
+LinkedIn: https://www.linkedin.com/in/mateo-fitipaldi/
+Email: fitipaldimateo85@gmail.com
 
-📸 Screenshots
-Main Interface
-The application features a modern dark theme with Nintendo-inspired colors:
+## 🙏 Acknowledgments
 
-Red gradient header
-Separate tabs for Mario (red theme) and Link (green theme)
-Clean, organized layout with rounded corners
-
-Item Management
-
-Left panel: Item creation buttons
-Center panel: Inventory list with capacity tracker
-Right panel: Action buttons
-Bottom panel: Detailed information display
+- Inspired by Super Mario Bros and The Legend of Zelda by Nintendo
+- Developed as part of DAM (Desarrollo de Aplicaciones Multiplataforma) curriculum
+- Thanks to the Java and Swing communities
+- Special thanks to my instructors and classmates at DAM Madrid
 
 
-🤝 Contributing
-Contributions are welcome! Here's how you can help:
+## 📖 Additional Resources
 
-Fork the Project
-Create your Feature Branch (git checkout -b feature/AmazingFeature)
-Commit your Changes (git commit -m 'Add some AmazingFeature')
-Push to the Branch (git push origin feature/AmazingFeature)
-Open a Pull Request
-
-Ideas for Contributions
-
-Add more item types (Kirby, Pokémon, etc.)
-Implement save/load functionality (JSON, XML, Database)
-Add item icons and images
-Create sound effects
-Add animations
-Implement a trading system
-Add statistics and charts
-Create unit tests
-Improve documentation
-
-
-📄 License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-👤 Contact
-Your Name
-
-GitHub: @yourusername
-LinkedIn: Your LinkedIn
-Email: your.email@example.com
-
-Project Link: https://github.com/yourusername/nintendo-items-manager
-
-🙏 Acknowledgments
-
-Inspired by Super Mario Bros and The Legend of Zelda by Nintendo
-Developed as part of DAM (Desarrollo de Aplicaciones Multiplataforma) curriculum
-Thanks to the Java and Swing communities
-Special thanks to my instructors and classmates at DAM Madrid
-
-
-📖 Additional Resources
-
-Java Documentation
-Java Swing Tutorial
-Object-Oriented Programming in Java
-IntelliJ IDEA Documentation
+- Java Documentation
+- Java Swing Tutorial
+- Object-Oriented Programming in Java
+- IntelliJ IDEA Documentation
 
 
 Made with ❤️ by a DAM student in Madrid, Spain
+
